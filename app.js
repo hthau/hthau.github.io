@@ -49,6 +49,7 @@ document.getElementById('guest-form').addEventListener('submit', (event) => {
         guests.push({ name, email });
         saveData(guests).then(() => {
             renderList(guests);
+            console.log(guests);
             document.getElementById('name').value = '';
             document.getElementById('email').value = '';
         });
