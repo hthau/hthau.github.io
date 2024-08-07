@@ -1,9 +1,6 @@
-// Firebase configuration and initialization
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
-
+// Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBEJPGQmxeiURz8moG3MrmAX0wJKx7KmhA",
+     apiKey: "AIzaSyBEJPGQmxeiURz8moG3MrmAX0wJKx7KmhA",
   authDomain: "weddingtest-11688.firebaseapp.com",
   projectId: "weddingtest-11688",
   storageBucket: "weddingtest-11688.appspot.com",
@@ -12,12 +9,13 @@ const firebaseConfig = {
   measurementId: "G-WCYGDQRRNH"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 // Fetch data from Firestore
 async function fetchData() {
-    const querySnapshot = await getDocs(collection(db, 'guests'));
+    const querySnapshot = await db.collection('guests').get();
     const guests = [];
     querySnapshot.forEach((doc) => {
         guests.push({ ...doc.data(), id: doc.id });
@@ -27,12 +25,12 @@ async function fetchData() {
 
 // Save data to Firestore
 async function saveData(name, email) {
-    await addDoc(collection(db, 'guests'), { name, email });
+    await db.collection('guests').add({ name, email });
 }
 
 // Delete data from Firestore
 async function deleteData(id) {
-    await deleteDoc(doc(db, 'guests', id));
+    await db.collection('guests').doc(id).delete();
 }
 
 // Render the guest list
@@ -76,3 +74,4 @@ document.getElementById('guest-form').addEventListener('submit', (event) => {
 
 // Initialize the app
 fetchData().then(renderList);
+
