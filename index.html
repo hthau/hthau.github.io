@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Guest List</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Guest List</title>
+    <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script defer src="app.js"></script>
 </head>
 <body>
-    <h1>Wedding Guest List</h1>
+    <h1>Guest List</h1>
     <form id="guest-form">
-        <input type="text" id="name" placeholder="Guest Name" required>
-        <input type="email" id="email" placeholder="Guest Email" required>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
         <button type="submit">Add Guest</button>
     </form>
     <ul id="guest-list"></ul>
-    <script src="app.js"></script>
 </body>
 </html>
