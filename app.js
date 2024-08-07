@@ -3,12 +3,13 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBEJPGQmxeiURz8moG3MrmAX0wJKx7KmhA",
+  authDomain: "weddingtest-11688.firebaseapp.com",
+  projectId: "weddingtest-11688",
+  storageBucket: "weddingtest-11688.appspot.com",
+  messagingSenderId: "508642310727",
+  appId: "1:508642310727:web:c15ecd7b8de51b11aa4f62",
+  measurementId: "G-WCYGDQRRNH"
 };
 
 const app = initializeApp(firebaseConfig);
