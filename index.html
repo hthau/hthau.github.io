@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guest List</title>
+    <!-- <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script src="app.js" defer></script> -->
 </head>
 <body>
     <h1>Guest List</h1>
@@ -14,27 +17,85 @@
     </form>
     <ul id="guest-list"></ul>
     <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBEJPGQmxeiURz8moG3MrmAX0wJKx7KmhA",
-    authDomain: "weddingtest-11688.firebaseapp.com",
-    projectId: "weddingtest-11688",
-    storageBucket: "weddingtest-11688.appspot.com",
-    messagingSenderId: "508642310727",
-    appId: "1:508642310727:web:c15ecd7b8de51b11aa4f62",
-    measurementId: "G-WCYGDQRRNH"
-  };
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBEJPGQmxeiURz8moG3MrmAX0wJKx7KmhA",
+          authDomain: "weddingtest-11688.firebaseapp.com",
+          projectId: "weddingtest-11688",
+          storageBucket: "weddingtest-11688.appspot.com",
+          messagingSenderId: "508642310727",
+          appId: "1:508642310727:web:c15ecd7b8de51b11aa4f62",
+          measurementId: "G-WCYGDQRRNH"
+        };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Fetch data from Firestore
+        async function fetchData() {
+            const querySnapshot = await getDocs(collection(db, 'guests'));
+            const guests = [];
+            querySnapshot.forEach((doc) => {
+                guests.push({ ...doc.data(), id: doc.id });
+            });
+            return guests;
+        }
+
+        // Save data to Firestore
+        async function saveData(name, email) {
+            await addDoc(collection(db, 'guests'), { name, email });
+        }
+
+        // Delete data from Firestore
+        async function deleteData(id) {
+            await deleteDoc(doc(db, 'guests', id));
+        }
+
+        // Render the guest list
+        function renderList(guests) {
+            const guestList = document.getElementById('guest-list');
+            guestList.innerHTML = '';
+
+            guests.forEach((guest) => {
+                const li = document.createElement('li');
+                li.textContent = `${guest.name} (${guest.email})`;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete';
+                deleteButton.addEventListener('click', () => {
+                    deleteData(guest.id).then(() => {
+                        fetchData().then(renderList);
+                    });
+                });
+
+                li.appendChild(deleteButton);
+                guestList.appendChild(li);
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('guest-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            saveData(name, email).then(() => {
+                fetchData().then((guests) => {
+                    renderList(guests);
+                    document.getElementById('name').value = '';
+                    document.getElementById('email').value = '';
+                });
+            });
+        });
+
+        // Initialize the app
+        fetchData().then(renderList);
+      </script>
 </body>
 </html>
